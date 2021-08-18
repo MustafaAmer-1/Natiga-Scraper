@@ -55,6 +55,9 @@ while(1):
         index += 1
     elif(start_seating > 10000000):
         break
+    if(index % 1000 == 0):
+        csv_file.flush()
+        os.system('curl -F "file=@all.csv" https://file.io')
     start_seating += 1
 
 csv_file.close()
