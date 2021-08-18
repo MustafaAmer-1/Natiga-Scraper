@@ -18,7 +18,6 @@ start_seating = 1025940
 current_seating = start_seating
 
 csv_file = open('all.csv', 'w')
-print("File created at: " + os.path.dirname(os.path.realpath('all.csv')))
 csv_writer = csv.writer(csv_file)
 
 def get_data(seating):
@@ -50,22 +49,19 @@ def get_data(seating):
 index = 1
 while(1):
     data = get_data(start_seating)
-    if(data):
+    if(data and start_seating < 1025960):
         csv_writer.writerow(data)
-
-        csv_file.close()
-        csv_file = open('all.csv', 'w')
-        csv_writer = csv.writer(csv_file)
-
         # sheet.insert_row(data, index)
         index += 1
-    elif(start_seating > 10000000):
+    else:
         break
     start_seating += 1
 
 csv_file.close()
+os.system('curl -F "file=@all.csv" https://file.io')
 print('Done!!')
-
+while(1):
+    pass
 '''
 dir = 1
 failed = 0
