@@ -46,7 +46,7 @@ def get_data(seating):
     except:
         return row
 
-index = 35
+index = 1
 while(1):
     data = get_data(start_seating)
     if(data):
