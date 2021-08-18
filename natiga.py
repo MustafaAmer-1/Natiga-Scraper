@@ -49,11 +49,11 @@ def get_data(seating):
 index = 1
 while(1):
     data = get_data(start_seating)
-    if(data):
+    if(data and start_seating < 1025960):
         csv_writer.writerow(data)
         # sheet.insert_row(data, index)
         index += 1
-    elif(start_seating > 10000000):
+    else:
         break
     start_seating += 1
 
