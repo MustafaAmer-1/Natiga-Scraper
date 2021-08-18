@@ -1,4 +1,4 @@
-import requests, time
+import requests, time, csv
 from bs4 import BeautifulSoup
 
 import gspread
@@ -9,14 +9,16 @@ scope = [
     'https://www.googleapis.com/auth/drive.file'
     ]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name('client_key.json', scope)
-client = gspread.authorize(creds)
-sheet = client.open('all').sheet1
+# creds = ServiceAccountCredentials.from_json_keyfile_name('client_key.json', scope)
+# client = gspread.authorize(creds)
+# sheet = client.open('all').sheet1
 
 url = 'https://natega.cairo24.com/Home/Result'
-start_seating = 1025974
+start_seating = 1025940
 current_seating = start_seating
 
+csv_file = open('all.csv', 'w')
+csv_writer = csv.writer(csv_file)
 
 def get_data(seating):
     data = {'seating_no': seating}
@@ -48,13 +50,14 @@ index = 35
 while(1):
     data = get_data(start_seating)
     if(data):
-        sheet.insert_row(data, index)
+        csv_writer.writerow(data)
+        # sheet.insert_row(data, index)
         index += 1
     elif(start_seating > 10000000):
         break
     start_seating += 1
 
-
+csv_file.close()
 print('Done!!')
 
 '''
