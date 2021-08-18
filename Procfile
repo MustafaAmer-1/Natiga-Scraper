@@ -1,1 +1,1 @@
-python test.py
+web: python natiga.py

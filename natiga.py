@@ -47,7 +47,6 @@ def get_data(seating):
 index = 1
 while(1):
     data = get_data(start_seating)
-    time.sleep(0.1) # sleep for 0.1 seconds
     if(data):
         sheet.insert_row(data, index)
         index += 1
