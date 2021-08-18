@@ -14,7 +14,7 @@ client = gspread.authorize(creds)
 sheet = client.open('all').sheet1
 
 url = 'https://natega.cairo24.com/Home/Result'
-start_seating = 1000000
+start_seating = 1025974
 current_seating = start_seating
 
 
@@ -44,7 +44,7 @@ def get_data(seating):
     except:
         return row
 
-index = 1
+index = 35
 while(1):
     data = get_data(start_seating)
     if(data):
