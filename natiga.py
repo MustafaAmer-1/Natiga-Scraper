@@ -52,6 +52,11 @@ while(1):
     data = get_data(start_seating)
     if(data):
         csv_writer.writerow(data)
+
+        csv_file.close()
+        csv_file = open('all.csv', 'w')
+        csv_writer = csv.writer(csv_file)
+
         # sheet.insert_row(data, index)
         index += 1
     elif(start_seating > 10000000):
