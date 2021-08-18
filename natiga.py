@@ -1,4 +1,4 @@
-import requests, time, csv
+import requests, csv, os
 from bs4 import BeautifulSoup
 
 import gspread
@@ -18,6 +18,7 @@ start_seating = 1025940
 current_seating = start_seating
 
 csv_file = open('all.csv', 'w')
+print("File created at: " + os.path.dirname(os.path.realpath('all.csv')))
 csv_writer = csv.writer(csv_file)
 
 def get_data(seating):
@@ -49,11 +50,11 @@ def get_data(seating):
 index = 1
 while(1):
     data = get_data(start_seating)
-    if(data and start_seating < 1025960):
+    if(data):
         csv_writer.writerow(data)
         # sheet.insert_row(data, index)
         index += 1
-    else:
+    elif(start_seating > 10000000):
         break
     start_seating += 1
 
