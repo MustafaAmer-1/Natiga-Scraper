@@ -1,1 +1,1 @@
-web: python natiga.py
+worker: python natiga.py
