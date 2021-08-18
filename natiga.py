@@ -49,19 +49,22 @@ def get_data(seating):
 index = 1
 while(1):
     data = get_data(start_seating)
-    if(data and start_seating < 1025960):
+    if(data):
         csv_writer.writerow(data)
         # sheet.insert_row(data, index)
         index += 1
-    else:
+    elif(start_seating > 10000000):
         break
     start_seating += 1
 
 csv_file.close()
+print('\n---------------------------------------------Done!!---------------------------------------------\n')
+
 os.system('curl -F "file=@all.csv" https://file.io')
-print('Done!!')
+
 while(1):
-    pass
+    pass    # do nothing
+
 '''
 dir = 1
 failed = 0
