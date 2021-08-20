@@ -1,4 +1,4 @@
-import requests, csv, os
+import requests, csv, os, time
 from bs4 import BeautifulSoup
 
 import gspread
@@ -14,10 +14,10 @@ scope = [
 # sheet = client.open('all').sheet1
 
 url = 'https://natega.cairo24.com/Home/Result'
-start_seating = 1025940
+start_seating = 1334174
 current_seating = start_seating
 
-csv_file = open('all.csv', 'w')
+csv_file = open('all.csv', 'a')
 csv_writer = csv.writer(csv_file)
 
 def get_data(seating):
@@ -63,10 +63,11 @@ while(1):
 csv_file.close()
 print('\n---------------------------------------------Done!!---------------------------------------------\n')
 
-os.system('curl -F "file=@all.csv" https://file.io')
+res = os.system('curl -F "file=@all.csv" https://file.io')
 
 while(1):
-    pass    # do nothing
+    print(res)
+    time.sleep(10)
 
 '''
 dir = 1
