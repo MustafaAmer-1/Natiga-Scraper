@@ -17,7 +17,7 @@ url = 'https://natega.cairo24.com/Home/Result'
 start_seating = 1334174
 current_seating = start_seating
 
-csv_file = open('all.csv', 'a')
+csv_file = open('all_again.csv', 'a')
 csv_writer = csv.writer(csv_file)
 
 def get_data(seating):
