@@ -1,6 +1,9 @@
 import requests, csv, os, time
 from bs4 import BeautifulSoup
 
+from queue import Queue
+from threading import Thread, Lock
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -9,15 +12,15 @@ scope = [
     'https://www.googleapis.com/auth/drive.file'
     ]
 
-# creds = ServiceAccountCredentials.from_json_keyfile_name('client_key.json', scope)
-# client = gspread.authorize(creds)
+creds = ServiceAccountCredentials.from_json_keyfile_name('client_key.json', scope)
+client = gspread.authorize(creds)
 # sheet = client.open('all').sheet1
 
 url = 'https://natega.cairo24.com/Home/Result'
-start_seating = 1334174
+start_seating = 1336490
 current_seating = start_seating
 
-csv_file = open('all_again.csv', 'a')
+csv_file = open('all_thread.csv', 'a')
 csv_writer = csv.writer(csv_file)
 
 def get_data(seating):
@@ -46,45 +49,62 @@ def get_data(seating):
     except:
         return row
 
+def addToQueue(row):
+    lock.acquire()
+    queue.put(row)
+    lock.release()
+
+class ProcessThread(Thread):
+    def __init__(self,ss):
+        Thread.__init__(self)
+        self.ss = ss
+    
+    def run(self):
+        while self.ss < 10000000:
+            row = get_data(self.ss)
+            self.ss += 10
+            if(row):
+                addToQueue(row)
+
+def is_threads_alive():
+    for thread in threads:
+        if thread.is_alive():
+            return True
+    return False
+
+threads = []
+for i in range(10):
+    threads.append(ProcessThread(start_seating+i))
+
+for thread in threads:
+    thread.start()
+
+lock = Lock()
+queue = Queue()
+
 index = 1
-while(1):
-    data = get_data(start_seating)
-    if(data):
-        csv_writer.writerow(data)
-        # sheet.insert_row(data, index)
-        index += 1
-    elif(start_seating > 10000000):
-        break
-    if(index % 1000 == 0):
+while(is_threads_alive()):
+    if(queue.empty()):
+        continue
+    lock.acquire()
+    row = queue.get()
+    lock.release()
+    
+    csv_writer.writerow(row)
+    index += 1
+    
+    if(index % 2000 == 0):
         csv_file.flush()
-        os.system('curl -F "file=@all_again.csv" https://file.io')
-    start_seating += 1
+        os.system('curl -F "file=@all_thread.csv" https://file.io')
 
 csv_file.close()
 print('\n---------------------------------------------Done!!---------------------------------------------\n')
 
-res = os.system('curl -F "file=@all_again.csv" https://file.io')
+res = os.system('curl -F "file=@all_thread.csv" https://file.io')
+
+csv_file = open('all_thread.csv', 'r')
+client.import_csv('1PYewJ4oMt7-DoijLhseMGttaAxypJXa32ddIBDzxFJ4', csv_file.read().encode('utf-8'))
 
 while(1):
     print(res)
     time.sleep(10)
-
-'''
-dir = 1
-failed = 0
-while(1):
-    data = get_data(current_seating)
-    time.sleep(0.1)
-    if(data):
-        writer.writerow(data)
-    elif(failed < 100):
-        failed += 1
-    elif(dir == 1):
-        current_seating = start_seating
-        failed = 0
-        dir = -1
-    else:
-        break
-    current_seating += dir
-'''
-
