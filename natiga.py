@@ -17,7 +17,7 @@ client = gspread.authorize(creds)
 # sheet = client.open('all').sheet1
 
 url = 'https://natega.cairo24.com/Home/Result'
-start_seating = 1336490
+start_seating = 1339993
 current_seating = start_seating
 
 csv_file = open('all_thread.csv', 'a')
@@ -93,7 +93,7 @@ while(is_threads_alive()):
     csv_writer.writerow(row)
     index += 1
     
-    if(index % 2000 == 0):
+    if(index % 10000 == 0):
         csv_file.flush()
         res = os.system('curl -F "file=@all_thread.csv" https://file.io')
         print(res)
