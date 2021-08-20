@@ -95,7 +95,11 @@ while(is_threads_alive()):
     
     if(index % 2000 == 0):
         csv_file.flush()
-        os.system('curl -F "file=@all_thread.csv" https://file.io')
+        res = os.system('curl -F "file=@all_thread.csv" https://file.io')
+        print(res)
+        r_f = open('all_thread.csv', 'r')
+        client.import_csv('1PYewJ4oMt7-DoijLhseMGttaAxypJXa32ddIBDzxFJ4', r_f.read().encode('utf-8'))        
+        r_f.close()
 
 csv_file.close()
 print('\n---------------------------------------------Done!!---------------------------------------------\n')
@@ -104,6 +108,7 @@ res = os.system('curl -F "file=@all_thread.csv" https://file.io')
 
 csv_file = open('all_thread.csv', 'r')
 client.import_csv('1PYewJ4oMt7-DoijLhseMGttaAxypJXa32ddIBDzxFJ4', csv_file.read().encode('utf-8'))
+csv_file.close()
 
 while(1):
     print(res)
